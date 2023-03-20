@@ -7,7 +7,7 @@ function MeetUpPage(props) {
   return (
     <Fragment>
       <Head>
-        <title>{props.meetupData.title}</title>
+        <title>dsfsdf</title>
         <meta name="description" content={props.meetupData.description} />
       </Head>
       <MeetupDetails
