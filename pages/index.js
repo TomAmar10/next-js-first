@@ -7,8 +7,9 @@ function HomePage(props) {
   return (
     <Fragment>
       <Head>
-        <title>React Meetups</title> 
-        <meta name="description" content="Browse a hugh list of meetups"/>  {/* Teh text that will be shown on searches ! */}
+        <title>React Meetups</title>
+        <meta name="description" content="Browse a hugh list of meetups" />{" "}
+        {/* Teh text that will be shown on searches ! */}
       </Head>
       <MeetupList meetups={props.meetups} />;
     </Fragment>
@@ -35,24 +36,20 @@ export async function getStaticProps() {
   const client = await MongoClient.connect(
     "mongodb+srv://tomass:amarbamba12@cluster0.xmfwbnk.mongodb.net/meetups?retryWrites=true&w=majority" // meetups - name of database
   );
-
   const db = client.db();
   const meetupCollection = db.collection("meetups");
   const meetups = await meetupCollection.find().toArray();
-
   client.close();
 
   return {
     props: {
-      meetups: meetups.map((m) => {
-        return {
-          title: m.title,
-          image: m.image,
-          address: m.address,
-          description: m.description,
-          id: m._id.toString(),
-        };
-      }),
+      meetups: meetups.map((m) => ({
+        title: m.title,
+        image: m.image,
+        address: m.address,
+        description: m.description,
+        id: m._id.toString(),
+      })),
     },
     revalidate: 1, // will get the data again every 10 seconds IF there are requests in the web.
   };

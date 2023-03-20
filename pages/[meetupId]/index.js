@@ -7,7 +7,7 @@ function MeetUpPage(props) {
   return (
     <Fragment>
       <Head>
-        <title>dsfsdf</title>
+        <title>{props.meetupData.title}</title>
         <meta name="description" content={props.meetupData.description} />
       </Head>
       <MeetupDetails
@@ -34,12 +34,12 @@ export async function getStaticPaths() {
 
   return {
     fallback: true, // with fallback - the paths that are not includes - will dynamically be generated with a request.
-    paths: meetups.map((m) => ({ params: { "meetup-id": m._id.toString() } })),
+    paths: meetups.map((m) => ({ params: { meetupId: m._id.toString() } })),
   };
 }
 
 export async function getStaticProps(context) {
-  const meetupId = context.params["meetup-id"];
+  const meetupId = context.params.meetupId;
 
   const client = await MongoClient.connect(
     "mongodb+srv://tomass:amarbamba12@cluster0.xmfwbnk.mongodb.net/meetups?retryWrites=true&w=majority" // meetups - name of database
@@ -52,12 +52,15 @@ export async function getStaticProps(context) {
   });
   client.close();
 
-  selectedMeetup.id = selectedMeetup._id.toString();
-  delete selectedMeetup._id;
-
   return {
     props: {
-      meetupData: selectedMeetup,
+      meetupData: {
+        id: selectedMeetup._id.toString(),
+        title: selectedMeetup.title,
+        address: selectedMeetup.address,
+        image: selectedMeetup.image,
+        description: selectedMeetup.description,
+      },
     },
   };
 }
