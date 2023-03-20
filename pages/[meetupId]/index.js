@@ -33,7 +33,7 @@ export async function getStaticPaths() {
   client.close();
 
   return {
-    fallback: true, // with fallback - the paths that are not includes - will dynamically be generated with a request.
+    fallback: 'blocking', // with fallback - the paths that are not includes - will dynamically be generated with a request.
     paths: meetups.map((m) => ({ params: { meetupId: m._id.toString() } })),
   };
 }
@@ -48,7 +48,7 @@ export async function getStaticProps(context) {
   const db = client.db();
   const meetupCollection = db.collection("meetups");
   const selectedMeetup = await meetupCollection.findOne({
-    _id: ObjectId(meetupId),
+    _id: new ObjectId(meetupId),
   });
   client.close();
 
